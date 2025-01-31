@@ -1,0 +1,35 @@
+{
+    // name for the dev container displayed in vscode UI
+    // localWorkspaceFolderBasename is a vscode enviromnent variable that prints the current project base folder name in the local file system
+    // ex. /home/example/my-project the devcontainer name will be my-project
+    // can be changed for any name you want if you dont want to use the folder name
+    "name": "${localWorkspaceFolderBasename}",
+    "dockerComposeFile": "docker-compose",
+
+    // location where the code will be placed inside the container
+    // if this location is changed you must also change it in the docker-compose file
+    "workspaceFolder": "/${localWorkspaceFolderBasename}",
+
+    // mounts the source code folder to the workspace folder in the container
+    "mounts": [{ "source": "../", "target": "/${localWorkspaceFolderBasename}", "type": "bind" }],
+
+    // must reference the service name in docker-compose that will be used for code development
+    // Ports that need to be exposed are declared in docker-compose file
+    "service": "api",
+
+    // default user that will be used in container, if the user doesnt exist in container base image you must create it in the Dockerfile
+    "containerUser": "node",
+    "customizations": {
+      "vscode": {
+        // vscode extensions that will be added automatically when the devcontainer is created
+        "extensions": [
+          "dbaeumer.vscode-eslint",
+          "eamodio.gitlens",
+          "stef-k.adonis-js-goto-controller",
+          "editorconfig.editorconfig",
+          "oderwat.indent-rainbow",
+          "esbenp.prettier-vscode"
+        ]
+      }
+    }
+  }

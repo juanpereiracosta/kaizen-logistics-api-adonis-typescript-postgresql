@@ -1,0 +1,73 @@
+networks:
+  default:
+    ## default network name used for all services
+    ## if no name is set docker will generate one unique to this docker-compose
+    ## we set a name so it can reused in another repository like the Calculation for the aplication
+    ## and all services in this file will be acessable in the other repository
+    name: abk-picking-dev
+
+## the first level in services is the name of each container / service, you are free change the names or add new services
+## in this devcontainer the api service is the main container that vscode will use, if you change the name of the service
+## you also need to change the service name in devcontainer.json to be the same
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+    ## to use volumes / shared folders use "volume" declaration at the end of the file
+    # volumes:
+    #   - my-volume:/workspace/example-folder
+
+    ## ports to be exposed, any port you need to access outside the dev containers need to be declared here
+    ##   - {local_port}:{container_port}
+    ports:
+      ## main aplication port
+      - 15920:3333
+
+    ## the container that is going to be open in vscode needs this command or it will return an error
+    ## this is a workaround, need a cleaner fix
+    command: sleep infinity
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    ports:
+      ## this port is exposed so we can use a database manager like DBeaver
+      - 15910:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+  ## Uncomment if the aplication needs to use redis caching
+  # redis:
+  #   image: redis:7-alpine
+  #   restart: unless-stopped
+  ## only needs to be used if you need access to redis from the host
+  # ports:
+  #   - XXX12:6379
+
+  rabbit:
+    image: rabbitmq:3
+    ## rabbitmq with management ui panel
+    # image: rabbitmq-management:3
+
+    restart: unless-stopped
+    command:
+      [
+        'rabbitmq-server',
+        '-rabbit',
+        'max_message_size 2038036224',
+        '-rabbit',
+        'consumer_timeout 72000000',
+      ]
+    ## only needs to be used if you need access to rabbit from the host
+    # ports:
+    ## main rabbit port
+    # - XXX13:5672
+
+    ## management ui panel for rabbit, if needed you have to change rabbit image to rabbitmq-management:3
+    # - XXX14:15672
+# volumes:
+#   my-volume:
+#     name: my-volume
