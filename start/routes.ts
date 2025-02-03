@@ -20,6 +20,8 @@ router
     // protected routes with auth middleware
     router
       .group(() => {
+        // Auth routes
+        router.get('whois', [AuthController, 'whois'])
         router.get('/', async () => {
           return {
             status: 'ok',
