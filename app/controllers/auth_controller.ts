@@ -16,9 +16,6 @@ export default class AuthController {
       tokenData: token,
       userData: {
         role: user.role,
-        countryId: user.countryId,
-        regionId: user.regionId,
-        pharmacyId: user.pharmacyId,
       },
     }
 

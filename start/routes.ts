@@ -20,6 +20,7 @@ router
     // protected routes with auth middleware
     router
       .group(() => {
+        router.delete('logout', [AuthController, 'logout'])
         // Auth routes
         router.get('whois', [AuthController, 'whois'])
         router.get('/', async () => {
