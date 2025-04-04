@@ -11,6 +11,7 @@ import { middleware } from './kernel.js'
 import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const ProjectsController = () => import('#controllers/projects_controller')
+const LayoutsController = () => import('#controllers/layouts_controller')
 
 router
   .group(() => {
@@ -24,12 +25,8 @@ router
         router.delete('logout', [AuthController, 'logout'])
         // Auth routes
         router.get('whois', [AuthController, 'whois'])
-        router.get('/', async () => {
-          return {
-            status: 'ok',
-          }
-        })
         router.resource('projects', ProjectsController)
+        router.resource('layouts', LayoutsController)
       })
       .middleware(middleware.auth({ guards: ['api'] }))
   })
