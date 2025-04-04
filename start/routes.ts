@@ -10,6 +10,7 @@
 import { middleware } from './kernel.js'
 import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
+const ProjectsController = () => import('#controllers/projects_controller')
 
 router
   .group(() => {
@@ -28,6 +29,7 @@ router
             status: 'ok',
           }
         })
+        router.resource('projects', ProjectsController)
       })
       .middleware(middleware.auth({ guards: ['api'] }))
   })
